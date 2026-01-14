@@ -8,10 +8,15 @@ mkdir C:\poperp\images
 
 ## CMD 창에서 다음 커맨드를 순서대로 실행해주세요
 `d:`
+
 `git clone https://github.com/ClarkAltius/pop_erp`
+
 `cd poperp`
+
 `cd frontend`
+
 `npm ci`
+
 `npm run dev`
 
 ## IntelliJ 에서 poperp 안의 backend 폴더를 연 후에 Maven Reload를 진행해주세요

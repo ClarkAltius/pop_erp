@@ -15,4 +15,9 @@ public class TestService {
         TestEntity entity = new TestEntity(name);
         return testRepository.save(entity);
     }
+
+
+    public TestEntity get(Long id) {
+        return testRepository.findById(id).orElse(null);
+    }
 }

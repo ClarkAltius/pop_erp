@@ -14,4 +14,9 @@ public class TestController {
     public TestEntity createTest(@RequestParam String name) {
         return testService.create(name);
     }
+
+    @GetMapping
+    public TestEntity getTest(@RequestParam Long id) {
+        return testService.get(id);
+    }
 }

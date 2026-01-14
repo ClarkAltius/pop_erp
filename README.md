@@ -11,7 +11,7 @@ mkdir C:\poperp\images
 
 `git clone https://github.com/ClarkAltius/pop_erp`
 
-`cd poperp`
+`cd pop_erp`
 
 `cd frontend`
 

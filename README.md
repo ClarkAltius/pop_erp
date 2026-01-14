@@ -19,13 +19,16 @@ mkdir C:\poperp\images
 
 `npm run dev`
 
-## CMD 창에서 다음 커맨드를 순서대로 실행해주세요
-`cd d:\pop_erp\backend`
-`set PATH=%PATH%;C:\Windows\System32\WindowsPowerShell\v1.0`
-`mvnw spring-boot:run`
-
-
 
 ## IntelliJ 에서 poperp 안의 backend 폴더를 연 후에 Maven Reload를 진행해주세요
 그 다음 BackendApplication.java 파일이 실행 되는지 확인해주세요
+
+
+
+## (CMD 에서 백엔드 확인하고자 할 경우. IntelliJ에서 정상 작동할 경우 할 필요 X) CMD 창에서 다음 커맨드를 순서대로 실행해주세요
+`cd d:\pop_erp\backend`
+
+`set PATH=%PATH%;C:\Windows\System32\WindowsPowerShell\v1.0`
+
+`mvnw spring-boot:run`
 

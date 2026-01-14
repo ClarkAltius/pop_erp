@@ -1,0 +1,16 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.c     text
+*.h     text
+
+# Force these to always use LF (Unix style), even on Windows.
+# This prevents the mvnw script from breaking on Linux servers.
+mvnw    text eol=lf
+*.sh    text eol=lf
+
+# Force Windows batch scripts to always use CRLF
+*.cmd   text eol=crlf
+*.bat   text eol=crlf

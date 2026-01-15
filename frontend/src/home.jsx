@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
 
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Test1 from './test1'
+
 function App() {
 
   const [name, setName] = useState('');
@@ -23,7 +26,20 @@ function App() {
 
 
   return (
+
     <>
+      <BrowserRouter>
+        {/* Navigation Menu (Optional) */}
+        <nav>
+          <Link to="/test1">Test1</Link>
+        </nav>
+
+        {/* Route Definitions */}
+        <Routes>
+          <Route path="/test1" element={<Test1 />} />
+        </Routes>
+      </BrowserRouter>
+
       <div>
         <h1>홈페이지 입니다</h1>
         <form onSubmit={handleSubmit}>
@@ -42,7 +58,6 @@ function App() {
           </div>
         )}
       </div>
-
     </>
   )
 }

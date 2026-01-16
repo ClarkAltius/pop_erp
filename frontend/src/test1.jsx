@@ -36,12 +36,12 @@ function Test1() {
             fontFamily: 'Arial, sans-serif',
             gap: '20px' // Space between elements
         }}>
-            <h2>Data Retrieval Test</h2>
+            <h2>서버 데이터 회수 테스트</h2>
 
             <div style={{ display: 'flex', gap: '10px' }}>
                 <input
                     type="number"
-                    placeholder="Enter ID (e.g. 1)"
+                    placeholder="숫자를 입력해주세요~!"
                     value={inputId}
                     onChange={(e) => setInputId(e.target.value)}
                     style={{ padding: '10px', fontSize: '1rem' }}
@@ -50,7 +50,7 @@ function Test1() {
                     onClick={fetchById}
                     style={{ padding: '10px 20px', fontSize: '1rem', cursor: 'pointer' }}
                 >
-                    Get Data
+                    데이터 회수하기
                 </button>
             </div>
 

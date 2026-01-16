@@ -44,6 +44,10 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
+        port: 22
+        debug: true                # <--- Turn on Debug Logs
+        timeout: 60s               # <--- Wait longer for connection
+        command_timeout: 30m       # <--- Wait longer for Java to start
         script: |
           # Stop any existing java process
           sudo pkill -f 'java -jar' || true
@@ -61,4 +65,5 @@ jobs:
             *.jar > /home/ubuntu/app.log 2>&1 &
           # Wait 5 seconds to let the process detach, then exit clean
           sleep 5
+          echo "Java started, exiting SSH..."
           exit

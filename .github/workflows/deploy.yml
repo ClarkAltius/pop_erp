@@ -60,7 +60,7 @@ jobs:
           
           # Start app (With input redirection < /dev/null to prevent hangs)
           nohup java -jar \
-            -DDB_URL='${{ secrets.RDS_ENDPOINT }}' \
+            -DDB_URL="jdbc:mysql://${{ secrets.RDS_ENDPOINT }}:3306/poperp?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC" \
             -DDB_USERNAME='${{ secrets.RDS_USER }}' \
             -DDB_PASSWORD='${{ secrets.RDS_PASS }}' \
             -DUPLOAD_DIR='/home/ubuntu/uploads/' \

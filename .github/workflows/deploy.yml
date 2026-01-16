@@ -15,17 +15,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Set up Java (Matches your EC2 version)
+    # 2. Set up Java
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    # 3. Build the JAR (Skip tests to save time during initial setup)
+    # 3. Build the JAR
     - name: Build with Maven
       run: mvn clean package -DskipTests
       working-directory: ./backend
+
     # 4. Copy JAR to EC2
     - name: Copy JAR via SCP
       uses: appleboy/scp-action@master
@@ -37,33 +38,38 @@ jobs:
         target: "/home/ubuntu/app"
         strip_components: 2
 
-    # 5. SSH into EC2 and Restart App
-    - name: SSH and Restart
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ubuntu
-        key: ${{ secrets.EC2_SSH_KEY }}
-        port: 22
-        debug: false                # <--- Turn on Debug Logs
-        timeout: 5m               # <--- Wait longer for connection
-        command_timeout: 30m       # <--- Wait longer for Java to start
-        script: |
-          # Stop any existing java process
+    # 5. Native SSH Deployment (The Fix)
+    - name: Deploy via Native SSH
+      run: |
+        # Save the Private Key to a file
+        echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+        
+        # Run the deployment commands via standard SSH
+        # -o StrictHostKeyChecking=no: Don't ask for confirmation
+        # -i private_key.pem: Use our key
+        ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+          
+          echo "1. Connected to server successfully."
+          
+          # Stop old app
           sudo pkill -f 'java -jar' || true
           
-          # Go to the folder
+          # Go to folder
           cd /home/ubuntu/app
           
-          # Start the new JAR in the background with RDS secrets
-          # (nohup allows it to keep running after GitHub disconnects)
+          # Start app (With input redirection < /dev/null to prevent hangs)
           nohup java -jar \
             -DDB_URL='${{ secrets.RDS_ENDPOINT }}' \
             -DDB_USERNAME='${{ secrets.RDS_USER }}' \
             -DDB_PASSWORD='${{ secrets.RDS_PASS }}' \
             -DUPLOAD_DIR='/home/ubuntu/uploads/' \
-            *.jar > /home/ubuntu/app.log 2>&1 &
-          # Wait 5 seconds to let the process detach, then exit clean
+            *.jar > app.log 2>&1 < /dev/null &
+          
+          echo "2. Java command sent."
           sleep 5
-          # echo "Java started, exiting SSH..."
-          exit
+          echo "3. Exiting."
+        EOF
+        
+        # Cleanup key
+        rm -f private_key.pem

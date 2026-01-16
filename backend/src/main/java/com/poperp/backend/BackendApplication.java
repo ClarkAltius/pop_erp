@@ -12,16 +12,4 @@ public class BackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
-
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")  // Allow ALL endpoints (/api/test, /login, etc.)
-						.allowedOrigins("*")    // Allow ALL websites (S3, Localhost, Mobile)
-						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS"); // Allow these actions
-			}
-		};
-	}
 }

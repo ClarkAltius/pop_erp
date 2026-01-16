@@ -28,10 +28,17 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000"); // React URL
+
+        // 1. Allow Localhost (for when you code on laptop)
+        configuration.addAllowedOrigin("http://localhost:3000");
+
+        // 2. Allow S3 Production URL
+        // COPY/PASTE your exact S3 bucket website URL here (no trailing slash)
+        configuration.addAllowedOrigin("http://poperp-frontend.s3-website-ap-southeast-2.amazonaws.com");
+
         configuration.addAllowedMethod("*"); // Allow GET, POST, PUT, DELETE
         configuration.addAllowedHeader("*"); // Allow all headers
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true); // Allow cookies/auth
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

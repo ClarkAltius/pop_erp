@@ -3,13 +3,11 @@ import axios from 'axios';
 
 function Test1() {
     const [message, setMessage] = useState('');
-
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'; // Fallback to proxy for localhost
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/test', {
-                    params: { id: 1 }
-                });
+                const response = await axios.get(`${API_BASE}/api/test`, { params: { id: 1 } });
                 setMessage(response.data.name);
             } catch (error) {
                 setMessage('서버 요청 실패: ' + error.message);

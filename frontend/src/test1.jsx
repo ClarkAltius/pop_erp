@@ -7,8 +7,8 @@ function Test1() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:9000/api/test', {
-                    params: { id: 6 }
+                const response = await axios.get('http://localhost:8080/api/test', {
+                    params: { id: 1 }
                 });
                 setMessage(response.data.name);
             } catch (error) {

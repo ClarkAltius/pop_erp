@@ -1,0 +1,51 @@
+name: Deploy Frontend to S3
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**' # Only trigger if frontend files change
+  workflow_dispatch:  # Allow manual button click
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend  # <--- CHECK THIS PATH
+
+    steps:
+    # 1. Checkout Code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Install Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    # 3. Install Dependencies
+    - name: Install Dependencies
+      run: npm install
+
+    # 4. Build React App
+    # We inject the backend URL here so it gets "baked" into the static files
+    - name: Build Project
+      run: npm run build
+      env:
+        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+
+    # 5. Upload to S3
+    - name: Deploy to S3
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --follow-symlinks --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'ap-southeast-2'   # <--- Check your region
+        SOURCE_DIR: 'frontend/dist'    # <--- Check this matches your build folder

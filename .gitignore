@@ -1,10 +1,27 @@
-HELP.md
+# --- Java / Backend ---
 target/
+!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 application.yml
 
-### STS ###
+# --- React / Frontend (CRITICAL ADDITIONS) ---
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.production
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- IDEs (Eclipse, IntelliJ, VS Code) ---
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
 .apt_generated
 .classpath
 .factorypath
@@ -12,31 +29,8 @@ application.yml
 .settings
 .springBeans
 .sts4-cache
+bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-
-
-### IDE specific files
-.idea/
-
-
+# --- OS Junk ---
 .DS_Store
-node_modules/
+Thumbs.db

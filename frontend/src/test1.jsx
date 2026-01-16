@@ -1,38 +1,62 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 function Test1() {
     const [message, setMessage] = useState('');
-    const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'; // Fallback to proxy for localhost
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`${API_BASE}/api/test`, { params: { id: 1 } });
-                setMessage(response.data.name);
-            } catch (error) {
-                setMessage('서버 요청 실패: ' + error.message);
-            }
-        };
+    const [inputId, setInputId] = useState(''); // State for the input box
 
-        fetchData();
-    }, []);
+    // Correct logic: Use Cloud URL if available, otherwise Localhost
+    const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+
+    const fetchById = async () => {
+        if (!inputId) {
+            alert("Please enter an ID");
+            return;
+        }
+
+        try {
+            // Sends GET request to /api/test?id=YOUR_INPUT
+            const response = await axios.get(`${BACKEND_URL}/api/test`, {
+                params: { id: inputId }
+            });
+            setMessage(`ID ${inputId}: ${response.data.name}`);
+        } catch (error) {
+            console.error(error);
+            setMessage('Error: ' + (error.response?.status === 404 ? 'ID not found' : error.message));
+        }
+    };
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-                fontSize: '2rem',
-                fontFamily: 'Arial, sans-serif'
-            }}
-        >
-            <h2>로그인 페이지입니다</h2>
-            <div><h3>{message}</h3></div>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column', // Stack items vertically
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+            fontFamily: 'Arial, sans-serif',
+            gap: '20px' // Space between elements
+        }}>
+            <h2>Data Retrieval Test</h2>
 
+            <div style={{ display: 'flex', gap: '10px' }}>
+                <input
+                    type="number"
+                    placeholder="Enter ID (e.g. 1)"
+                    value={inputId}
+                    onChange={(e) => setInputId(e.target.value)}
+                    style={{ padding: '10px', fontSize: '1rem' }}
+                />
+                <button
+                    onClick={fetchById}
+                    style={{ padding: '10px 20px', fontSize: '1rem', cursor: 'pointer' }}
+                >
+                    Get Data
+                </button>
+            </div>
 
-
+            <div style={{ fontSize: '2rem', color: 'blue' }}>
+                <h3>{message}</h3>
+            </div>
         </div>
     );
 }

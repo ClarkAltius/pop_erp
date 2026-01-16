@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Test1 from './test1'
 
 function App() {
-
+  const BACKEND_URL = "http://54.79.31.69:8080";
   const [name, setName] = useState('');
   const [response, setResponse] = useState(null);
 
@@ -14,7 +14,7 @@ function App() {
 
     try {
       // 쿼리 파라미터로 `name`을 보내는 방식
-      const res = await axios.post(`/api/test?name=${name}`);
+      const res = await axios.post(`${BACKEND_URL}/api/test?name=${name}`);
       // 응답을 받아서 상태에 저장
       setResponse(res.data);
       alert('데이터가 성공적으로 추가되었습니다!');

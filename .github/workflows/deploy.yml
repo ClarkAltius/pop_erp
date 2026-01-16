@@ -59,3 +59,6 @@ jobs:
             -DDB_PASSWORD='${{ secrets.RDS_PASS }}' \
             -DUPLOAD_DIR='/home/ubuntu/uploads/' \
             *.jar > /home/ubuntu/app.log 2>&1 &
+          # Wait 5 seconds to let the process detach, then exit clean
+          sleep 5
+          exit

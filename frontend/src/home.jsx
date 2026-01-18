@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Test1 from './test1'
 
 function App() {
-  const BACKEND_URL = "http://54.79.31.69:8080";
+  const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
   const [name, setName] = useState('');
   const [response, setResponse] = useState(null);
 

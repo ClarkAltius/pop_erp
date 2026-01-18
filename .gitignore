@@ -5,19 +5,29 @@ target/
 !**/src/test/**/target/
 application.yml
 
-# --- React / Frontend (CRITICAL ADDITIONS) ---
+# --- React / Frontend ---
 node_modules/
 dist/
 build/
 .env
 .env.local
 .env.production
+# FIX 1: The exclamation mark (!) tells Git "DO NOT ignore this file"
+# We want your team to have the localhost settings automatically.
+!.env.development
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# --- IDEs (Eclipse, IntelliJ, VS Code) ---
+# --- IDEs (IntelliJ, VS Code, etc) ---
+# Ignore the entire .idea folder...
 .idea/
+# FIX 2: ...EXCEPT for the shared Run Configurations (The "Play" Buttons)
+!/.idea/runConfigurations/
+# (Some newer IntelliJ versions use a .run folder at the root, so we whitelist that too)
+!/.run/
+
 *.iws
 *.iml
 *.ipr

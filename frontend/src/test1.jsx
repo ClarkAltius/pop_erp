@@ -6,7 +6,7 @@ function Test1() {
     const [inputId, setInputId] = useState(''); // State for the input box
 
     // Correct logic: Use Cloud URL if available, otherwise Localhost
-    const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+    const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
 
     const fetchById = async () => {
         if (!inputId) {

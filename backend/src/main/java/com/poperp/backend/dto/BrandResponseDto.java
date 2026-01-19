@@ -1,11 +1,16 @@
 package com.poperp.backend.dto;
 
 import com.poperp.backend.entity.Brands;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public record BrandResponseDto(
-        Long id,
-        String name
-) {
+@Getter
+@AllArgsConstructor
+public class BrandResponseDto {
+
+    private final Long id;
+    private final String name;
+
     public static BrandResponseDto from(Brands brands) {
         return new BrandResponseDto(
                 brands.getId(),

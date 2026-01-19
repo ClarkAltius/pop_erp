@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "brand")
 @Getter
@@ -16,6 +18,12 @@ public class Brands {
 
     @Column(nullable = false)
     private String name;
+
+    @Column(name = "commission_rate")
+    private BigDecimal commisionRate;
+
+    @Column(name = "contact_email")
+    private String email;
 
     @Column(name = "is_active", nullable = false)
     private boolean active;

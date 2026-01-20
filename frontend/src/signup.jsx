@@ -32,7 +32,7 @@ export default function Signup() {
         console.log("회원가입 데이터:", payload);
 
         alert("회원가입 완료");
-        navigate("/"); // 가입 후 로그인 페이지로 이동
+        navigate("/login"); // 가입 후 로그인 페이지로 이동
     };
 
     return (
@@ -114,7 +114,7 @@ export default function Signup() {
                         <button
                             type="button"
                             style={{ flex: 1 }}
-                            onClick={() => navigate("/")}
+                            onClick={() => navigate("/login")}
                         >
                             이전으로
                         </button>

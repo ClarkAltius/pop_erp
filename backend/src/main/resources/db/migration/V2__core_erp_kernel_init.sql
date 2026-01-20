@@ -1,12 +1,4 @@
 /*
-You are a veteran accountant, database pro and a senior developer.
-check this flyway file for me.
-it's a schema for an MVP of a small-scale erp-lite for pop-up store agencies.
-It will remain small in scale and scope. focus on checking the logic not adding features.
-ready to see if anything is faulty or potentially problematic?
-*/
-
-/*
   FLYWAY V2 MIGRATION
   MySQL 8.0.x or above
   Project: ERP-Lite (Pop-up Store Edition)

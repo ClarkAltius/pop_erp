@@ -1,0 +1,453 @@
+openapi: 3.0.3
+info:
+  title: PopERP API 명세서
+  description: >
+    팝업 스토어 ERP(PopERP)를 위한 스키마 기반 API 규약입니다.
+    이 계약은 프론트엔드와 백엔드 팀 간의 상호작용을 규정하며, 
+    재고, POS, 회계 모듈 전반의 데이터 무결성을 보장합니다.
+  version: 1.0.0
+servers:
+  - url: https://api.poperp.io/v1
+    description: 운영 서버
+
+tags:
+  - name: Auth & Users
+    description: 핵심 액세스 제어 및 직원 관리.
+  - name: Master Data
+    description: 브랜드, 제품 및 위치 기준 정보 설정.
+  - name: Inventory
+    description: 재고 이동, 보충 및 실시간 수량 관리.
+  - name: POS Operations
+    description: 판매 처리 및 판매 세션 관리.
+  - name: Settlements
+    description: 브랜드 정산 금액 계산 및 확정.
+  - name: Accounting
+    description: 재무 원장 및 계정 과목표 관리.
+
+paths:
+  # --- 인증 및 사용자 ---
+  /api/auth/login:
+    post:
+      tags: [Auth & Users]
+      summary: 사용자 로그인
+      description: 사용자를 인증하고 사용자 정보가 포함된 JWT/세션 토큰을 반환합니다.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, format: password }
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken: { type: string }
+                  user: { $ref: '#/components/schemas/sys_user' }
+        '401': { description: 인증 실패 }
+
+  /api/users/me:
+    get:
+      tags: [Auth & Users]
+      summary: 현재 사용자 정보 조회
+      security: [{ BearerAuth: [] }]
+      responses:
+        '200':
+          description: 프로필과 할당된 매장/브랜드 정보를 반환합니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user: { $ref: '#/components/schemas/sys_user' }
+                  context:
+                    type: object
+                    properties:
+                      brand: { $ref: '#/components/schemas/brand' }
+                      popupStore: { $ref: '#/components/schemas/popup_store' }
+
+  /api/users:
+    post:
+      tags: [Auth & Users]
+      summary: 신규 직원 등록
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/sys_user'
+                - type: object
+                  required: [password, hourlyRate]
+                  properties:
+                    password: { type: string }
+                    hourlyRate: { type: number }
+                    hiredDate: { type: string, format: date }
+                    emergencyContact: { type: string }
+      responses:
+        '201': { description: 생성됨 }
+
+  # --- 마스터 데이터 ---
+  /api/brands:
+    get:
+      tags: [Master Data]
+      summary: 활성 브랜드 목록 조회
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/brand' }
+    post:
+      tags: [Master Data]
+      summary: 브랜드 등록
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/brand' }
+      responses:
+        '201': { description: 생성됨 }
+
+  /api/products:
+    get:
+      tags: [Master Data]
+      summary: 제품 필터링 조회
+      parameters:
+        - name: brandId
+          in: query
+          schema: { type: integer }
+        - name: sku
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/product' }
+    post:
+      tags: [Master Data]
+      summary: 제품 생성
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/product' }
+      responses:
+        '201': { description: 생성됨 }
+
+  # --- 재고 관리 ---
+  /api/inventory/levels:
+    get:
+      tags: [Inventory]
+      summary: 재고 수준 조회
+      parameters:
+        - name: locationId
+          in: query
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: 해당 위치의 제품별 현재 재고 수량입니다.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    productId: { type: integer }
+                    sku: { type: string }
+                    quantity: { type: number }
+
+  /api/inventory/requests:
+    post:
+      tags: [Inventory]
+      summary: 재고 요청 생성
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [popupStoreId, locationSrcId, items]
+              properties:
+                popupStoreId: { type: integer }
+                locationSrcId: { type: integer }
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productId: { type: integer }
+                      qty: { type: number }
+      responses:
+        '201': { description: 생성됨 }
+
+  /api/inventory/moves:
+    post:
+      tags: [Inventory]
+      summary: 재고 이동 실행
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/stock_move' }
+      responses:
+        '201': { description: 생성됨 }
+
+  # --- POS 운영 ---
+  /api/pos/sessions/open:
+    post:
+      tags: [POS Operations]
+      summary: POS 세션 개시
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [popupStoreId, openingBalance]
+              properties:
+                popupStoreId: { type: integer }
+                openingBalance: { type: number }
+      responses:
+        '201': { description: 생성됨 }
+
+  /api/pos/sessions/close:
+    post:
+      tags: [POS Operations]
+      summary: POS 세션 마감
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sessionId, closingControlBalance]
+              properties:
+                sessionId: { type: integer }
+                closingControlBalance: { type: number }
+      responses:
+        '200': { description: 성공 }
+
+  /api/orders:
+    post:
+      tags: [POS Operations]
+      summary: 판매 주문 생성
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [posSessionId, popupStoreId, items, payment]
+              properties:
+                posSessionId: { type: integer }
+                popupStoreId: { type: integer }
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productId: { type: integer }
+                      qty: { type: number }
+                      unitPrice: { type: number }
+                payment:
+                  type: object
+                  properties:
+                    accountId: { type: integer }
+                    amount: { type: number }
+      responses:
+        '201': { description: 생성됨 }
+
+  /api/orders/{id}/refund:
+    post:
+      tags: [POS Operations]
+      summary: 환불 처리
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refundType, items]
+              properties:
+                refundType: { type: string, enum: [RETURN, DAMAGE] }
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      orderLineId: { type: integer }
+                      quantity: { type: number }
+      responses:
+        '201': { description: 생성됨 }
+
+  # --- 정산 관리 ---
+  /api/settlements/calculate:
+    post:
+      tags: [Settlements]
+      summary: 정산 계산 실행
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [brandId, periodStart, periodEnd]
+              properties:
+                brandId: { type: integer }
+                periodStart: { type: string, format: date }
+                periodEnd: { type: string, format: date }
+      responses:
+        '201': { description: 생성됨 }
+
+  /api/settlements:
+    get:
+      tags: [Settlements]
+      summary: 정산 내역 검토
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/settlement' }
+
+  /api/settlements/{id}/confirm:
+    patch:
+      tags: [Settlements]
+      summary: 정산 확정 및 잠금
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: 성공 }
+
+  # --- 회계 관리 ---
+  /api/accounting/accounts:
+    get:
+      tags: [Accounting]
+      summary: 계정 과목표 조회
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/account_account' }
+
+  /api/accounting/journal:
+    get:
+      tags: [Accounting]
+      summary: 분개장 항목 조회
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/account_move' }
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    sys_user:
+      type: object
+      required: [email, fullName, role]
+      properties:
+        id: { type: integer, format: int64 }
+        email: { type: string }
+        fullName: { type: string }
+        role: { type: string, enum: [SUPER_ADMIN, BRAND_MANAGER, STORE_MANAGER, CASHIER] }
+        brandId: { type: integer, nullable: true }
+        defaultPopupStoreId: { type: integer, nullable: true }
+
+    brand:
+      type: object
+      required: [name]
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+        commissionRate: { type: number }
+        contactEmail: { type: string }
+
+    product:
+      type: object
+      required: [brandId, sku, name, price, cost]
+      properties:
+        id: { type: integer, format: int64 }
+        brandId: { type: integer }
+        sku: { type: string }
+        name: { type: string }
+        category: { type: string }
+        price: { type: number }
+        cost: { type: number }
+
+    popup_store:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+        startDate: { type: string, format: date }
+        endDate: { type: string, format: date }
+        status: { type: string, enum: [OPEN, CLOSED, PENDING] }
+
+    stock_move:
+      type: object
+      required: [productId, locationSrcId, locationDestId, qty]
+      properties:
+        id: { type: integer, format: int64 }
+        productId: { type: integer }
+        locationSrcId: { type: integer }
+        locationDestId: { type: integer }
+        qty: { type: number }
+        status: { type: string, enum: [PENDING, DONE, CANCELLED] }
+
+    settlement:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        brandId: { type: integer }
+        totalSalesAmount: { type: number }
+        payoutAmount: { type: number }
+        status: { type: string, enum: [DRAFT, CONFIRMED, PAID] }
+
+    account_account:
+      type: object
+      properties:
+        id: { type: integer }
+        code: { type: string }
+        name: { type: string }
+        type: { type: string, enum: [ASSET, LIABILITY, EQUITY, INCOME, EXPENSE] }
+
+    account_move:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        date: { type: string, format: date-time }
+        reference: { type: string }
+        state: { type: string, enum: [DRAFT, POSTED] }

@@ -1,14 +1,12 @@
 package com.poperp.backend.controller;
 
 import com.poperp.backend.dto.BrandResponseDto;
+import com.poperp.backend.entity.Brands;
 import com.poperp.backend.service.BrandService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,8 +16,10 @@ public class BrandController {
     private final BrandService brandService;
 
     @GetMapping
-    public List<BrandResponseDto> getBrands() {
-        return brandService.getBrands();
+    public Page<BrandResponseDto> getBrands(
+            @RequestParam(defaultValue = "0") int page
+    ) {
+        return brandService.getActiveBrands(page);
     }
 
     @GetMapping("/{id}")
@@ -30,4 +30,5 @@ public class BrandController {
     public String test() {
         return "OK";
     }
+
 }

@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './Brands.css';
 
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
 
-const Brands = () => {
+function Brands() {
+
+    const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
+
 
     const [brands, setBrands] = useState([]); // 브랜드 목록을 저장할 state
     const [loading, setLoading] = useState(true); // 로딩 상태
@@ -14,8 +18,9 @@ const Brands = () => {
     useEffect(() => {
         const fetchBrands = async () => {
             try {
-                const response = await axios.get("/api/brands"); // API 엔드포인트
+                const response = await axios.get(`${BACKEND_URL}/brands`); // API 엔드포인트
                 setBrands(response.data); // 받아온 데이터로 브랜드 목록 업데이트
+                console.log(response.data)
             } catch (err) {
                 setError("브랜드 목록을 불러오는 데 실패했습니다."); // 에러 처리
             } finally {
@@ -33,6 +38,8 @@ const Brands = () => {
     if (error) {
         return <div>{error}</div>;
     }
+
+
 
     return (
         <div className="dashboard-container">
@@ -97,10 +104,8 @@ const Brands = () => {
                                                 </td>
 
                                                 <td>
-                                                    {/* Fix: Check if 1, set class to 'active', otherwise 'inactive' */}
-                                                    <span className={`badge status-${brand.is_active === 1 ? 'active' : 'expired'}`}>
-                                                        {/* Fix: Display text instead of the number 1 */}
-                                                        {brand.is_active === 1 ? '활동중' : '만료'}
+                                                    <span className={`badge status-${brand.active ? 'active' : 'expired'}`}>
+                                                        {brand.active ? '활동중' : '만료'}
                                                     </span>
                                                 </td>
 

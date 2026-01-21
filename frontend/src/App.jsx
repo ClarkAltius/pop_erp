@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 // 페이지 import
 import Test1 from './test1';
 import AdminDashboard from './pages/Dashboard/AdminDashboard';
-import Brands from './pages/Brands/Brands';
+import Brands from './pages/CRM/Brands.jsx';
+import Projects from './pages/CRM/Projects.jsx';
+import IncomingRequests from './pages/Inventory/IncomingRequests.jsx';
+import Products from './pages/Inventory/Products.jsx';
+import StockStatus from './pages/Inventory/StockStatus.jsx';
 
 function App() {
   // State to toggle the dropdown visibility
@@ -15,7 +18,7 @@ function App() {
     <BrowserRouter>
 
       {/* --- 개발자 메뉴 START --- */}
-      <div style={styles.devMenuContainer}>
+      {/* <div style={styles.devMenuContainer}>
         <button
           onClick={() => setIsDevMenuOpen(!isDevMenuOpen)}
           style={styles.devButton}
@@ -34,9 +37,10 @@ function App() {
             <Link to="/Brands" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>
               Brands List
             </Link>
+
           </div>
         )}
-      </div>
+      </div> */}
       {/* --- 개발자 메뉴 end --- */}
 
 
@@ -44,7 +48,15 @@ function App() {
       <Routes>
         <Route path="/test1" element={<Test1 />} />
         <Route path="/AdminDashboard" element={<AdminDashboard />} />
+
+        {/* CRM */}
         <Route path="/Brands" element={<Brands />} />
+        <Route path="/Projects" element={<Projects />} />
+        {/* Inventory */}
+        <Route path="/IncomingRequests" element={<IncomingRequests />} />
+        <Route path="/Products" element={<Products />} />
+        <Route path="/StockStatus" element={<StockStatus />} />
+
       </Routes>
 
     </BrowserRouter>

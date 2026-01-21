@@ -1,0 +1,30 @@
+package com.poperp.backend.service;
+
+import com.poperp.backend.dto.BrandResponseDto;
+import com.poperp.backend.entity.Brands;
+import com.poperp.backend.repository.BrandRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class BrandService {
+
+    private final BrandRepository brandRepository;
+
+    public List<BrandResponseDto> getBrands() {
+        return brandRepository.findAll()
+                .stream()
+                .map(BrandResponseDto::from)
+                .toList();
+    }
+
+    public BrandResponseDto getBrand(Long id) {
+        Brands brand = brandRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("브랜드 없음"));
+
+        return BrandResponseDto.from(brand);
+    }
+}

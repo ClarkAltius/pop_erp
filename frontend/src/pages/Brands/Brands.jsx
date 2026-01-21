@@ -9,27 +9,35 @@ function Brands() {
 
     const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
 
+    const [brands, setBrands] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const [brands, setBrands] = useState([]); // 브랜드 목록을 저장할 state
-    const [loading, setLoading] = useState(true); // 로딩 상태
-    const [error, setError] = useState(null); // 에러 상태
+    const [page, setPage] = useState(1);       // 현재 페이지
+    const [limit, setLimit] = useState(10);    // 페이지당 아이템 수
+    const [total, setTotal] = useState(0);     // 총 브랜드 개수
 
-    // API 호출
     useEffect(() => {
         const fetchBrands = async () => {
+            setLoading(true);  // 요청 시작 시 로딩 true
             try {
-                const response = await axios.get(`${BACKEND_URL}/brands`); // API 엔드포인트
-                setBrands(response.data); // 받아온 데이터로 브랜드 목록 업데이트
-                console.log(response.data)
+                const response = await axios.get(`${BACKEND_URL}/brands`, {
+                    params: {
+                        page: page,
+                        limit: limit
+                    }
+                });
+                setBrands(response.data.brands); // 브랜드 목록 업데이트
+                setTotal(response.data.total);   // 총 데이터 수 업데이트
             } catch (err) {
-                setError("브랜드 목록을 불러오는 데 실패했습니다."); // 에러 처리
+                setError("브랜드 목록을 불러오는 데 실패했습니다.");
             } finally {
-                setLoading(false); // 로딩 끝
+                setLoading(false);
             }
         };
 
         fetchBrands();
-    }, []); // 빈 배열을 넣으면 컴포넌트가 처음 렌더링될 때만 호출됨
+    }, [page, limit]); // page 또는 limit 변경 시 API 재호출
 
     if (loading) {
         return <div>로딩 중...</div>;
@@ -39,7 +47,15 @@ function Brands() {
         return <div>{error}</div>;
     }
 
+    const totalPages = Math.ceil(total / limit);
 
+    const handlePrev = () => {
+        setPage(prev => Math.max(prev - 1, 1));
+    };
+
+    const handleNext = () => {
+        setPage(prev => Math.min(prev + 1, totalPages));
+    };
 
     return (
         <div className="dashboard-container">
@@ -122,10 +138,11 @@ function Brands() {
 
                             {/* Pagination Placeholder */}
                             <div className="table-footer">
-                                <span className="footer-text">24개 중 3개 표기</span>
+                                <span className="footer-text">{total}개 중 {brands.length}개 표기</span>
                                 <div className="pagination-btns">
-                                    <button disabled className="page-btn">이전</button>
-                                    <button className="page-btn">다음</button>
+                                    <button onClick={handlePrev} disabled={page === 1} className="page-btn">이전</button>
+                                    <span className="page-info">{page} / {totalPages}</span>
+                                    <button onClick={handleNext} disabled={page === totalPages} className="page-btn">다음</button>
                                 </div>
                             </div>
 

@@ -49,3 +49,4 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'ap-southeast-2'   # <--- Check your region
         SOURCE_DIR: 'frontend/dist'    # <--- Check this matches your build folder
+        

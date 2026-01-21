@@ -24,7 +24,7 @@ public class AuthService {
     @Transactional
     public LoginResponse login(LoginRequest request) {
 
-        SysUser user = userRepository.findByEmailAndActiveTrue(request.getEmail())
+        SysUser user = userRepository.findByEmailAndIsActiveTrue(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {

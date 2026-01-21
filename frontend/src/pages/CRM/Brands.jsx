@@ -39,14 +39,6 @@ function Brands() {
         fetchBrands();
     }, [page, limit]); // page 또는 limit 변경 시 API 재호출
 
-    if (loading) {
-        return <div>로딩 중...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     const totalPages = Math.ceil(total / limit);
 
     const handlePrev = () => {
@@ -75,7 +67,7 @@ function Brands() {
                         {/* Page Header */}
                         <div className="page-header">
                             <div>
-                                <h1 className="page-title">브랜드 일람</h1>
+                                <h1 className="page-title">브랜드 관리</h1>
                                 <p className="page-subtitle">파트너 관계와 계약 관리</p>
                             </div>
                             <div className="header-actions">

@@ -115,3 +115,14 @@
     color: white;
     border-color: #4b5563;
 }
+
+.sub-menu {
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-item {
+    font-size: 0.9rem;
+    color: #555;
+}

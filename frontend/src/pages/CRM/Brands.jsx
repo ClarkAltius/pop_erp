@@ -19,16 +19,13 @@ function Brands() {
 
     useEffect(() => {
         const fetchBrands = async () => {
-            setLoading(true);  // 요청 시작 시 로딩 true
+            setLoading(true);
             try {
                 const response = await axios.get(`${BACKEND_URL}/brands`, {
-                    params: {
-                        page: page,
-                        limit: limit
-                    }
+                    params: { page, limit }
                 });
-                setBrands(response.data.brands); // 브랜드 목록 업데이트
-                setTotal(response.data.total);   // 총 데이터 수 업데이트
+                setBrands(response.data.content);  // ⚠ content 사용
+                setTotal(response.data.totalElements);  // totalElements 사용
             } catch (err) {
                 setError("브랜드 목록을 불러오는 데 실패했습니다.");
             } finally {
@@ -37,7 +34,8 @@ function Brands() {
         };
 
         fetchBrands();
-    }, [page, limit]); // page 또는 limit 변경 시 API 재호출
+    }, [page, limit]);
+
 
     const totalPages = Math.ceil(total / limit);
 
@@ -48,6 +46,7 @@ function Brands() {
     const handleNext = () => {
         setPage(prev => Math.min(prev + 1, totalPages));
     };
+
 
     return (
         <div className="dashboard-container">

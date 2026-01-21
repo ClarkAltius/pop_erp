@@ -18,7 +18,7 @@ function App() {
     <BrowserRouter>
 
       {/* --- 개발자 메뉴 START --- */}
-      <div style={styles.devMenuContainer}>
+      {/* <div style={styles.devMenuContainer}>
         <button
           onClick={() => setIsDevMenuOpen(!isDevMenuOpen)}
           style={styles.devButton}
@@ -37,9 +37,10 @@ function App() {
             <Link to="/Brands" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>
               Brands List
             </Link>
+
           </div>
         )}
-      </div>
+      </div> */}
       {/* --- 개발자 메뉴 end --- */}
 
 

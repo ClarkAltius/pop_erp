@@ -1,0 +1,156 @@
+/* --- Reusing basic layout classes from AdminDashboard.css --- */
+/* (Ensure .dashboard-container, .main-content-wrapper, .btn-primary, etc. are loaded) */
+
+.page-subtitle {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-secondary {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #f9fafb;
+}
+
+/* --- Filter Bar --- */
+.filter-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.filter-input,
+.filter-select {
+    padding: 10px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.filter-input {
+    flex: 1;
+    /* Search takes available space */
+    max-width: 400px;
+}
+
+/* --- Table Specifics --- */
+
+/* Brand Column */
+.brand-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    object-fit: cover;
+    background-color: #f3f4f6;
+}
+
+.brand-name {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Contact Column */
+.contact-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-name {
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+.contact-email {
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+/* Specific Status Colors */
+.status-active {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-negotiating {
+    background-color: #fef9c3;
+    color: #854d0e;
+}
+
+.status-expired {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Action Icons */
+.text-right {
+    text-align: right;
+}
+
+.action-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 8px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.action-icon:hover {
+    opacity: 1;
+}
+
+/* --- Table Footer / Pagination --- */
+.table-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-text {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.pagination-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.page-btn {
+    padding: 6px 12px;
+    border: 1px solid #d1d5db;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #374151;
+}
+
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

@@ -5,31 +5,34 @@ import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
 
 const Brands = () => {
-    // Mock Data: Brands & Contract Details
-    const [brands] = useState([
-        {
-            id: 1,
-            name: "Nike",
-            contact_email: "procurement@nike.com",
-            is_active: 1, // 1 = active
-            commission_rate: 0.15,
-        },
-        {
-            id: 2,
-            name: "카카오프렌즈",
-            contact_email: "procurement@kakao.com",
-            is_active: 1, // 1 = active
-            commission_rate: 0.15,
-        },
-        {
-            id: 3,
-            name: "먼작귀",
-            contact_email: "procurement@chiikawa.com",
-            is_active: 1, // 1 = active
-            commission_rate: 0.15,
-        },
-    ]);
-    // Mock Data End
+
+    const [brands, setBrands] = useState([]); // 브랜드 목록을 저장할 state
+    const [loading, setLoading] = useState(true); // 로딩 상태
+    const [error, setError] = useState(null); // 에러 상태
+
+    // API 호출
+    useEffect(() => {
+        const fetchBrands = async () => {
+            try {
+                const response = await axios.get("/api/brands"); // API 엔드포인트
+                setBrands(response.data); // 받아온 데이터로 브랜드 목록 업데이트
+            } catch (err) {
+                setError("브랜드 목록을 불러오는 데 실패했습니다."); // 에러 처리
+            } finally {
+                setLoading(false); // 로딩 끝
+            }
+        };
+
+        fetchBrands();
+    }, []); // 빈 배열을 넣으면 컴포넌트가 처음 렌더링될 때만 호출됨
+
+    if (loading) {
+        return <div>로딩 중...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     return (
         <div className="dashboard-container">

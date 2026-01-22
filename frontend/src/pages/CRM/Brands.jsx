@@ -24,6 +24,7 @@ function Brands() {
                 const response = await axios.get(`${BACKEND_URL}/brands`, {
                     params: { page, limit }
                 });
+                console.log(response.data)
                 setBrands(response.data.content);  // ⚠ content 사용
                 setTotal(response.data.totalElements);  // totalElements 사용
             } catch (err) {
@@ -101,18 +102,19 @@ function Brands() {
                                                 {/* Contact Info */}
                                                 <td>
                                                     <div className="contact-cell">
-                                                        <span className="contact-email">{brand.contact_email}</span>
+                                                        <span className="contact-email">{brand.contactEmail}</span>
                                                     </div>
                                                 </td>
 
+
                                                 {/* 수수료 */}
                                                 <td style={{ fontWeight: 600, color: '#374151' }}>
-                                                    {brand.commission_rate}
+                                                    {brand.commissionRate}
                                                 </td>
 
                                                 <td>
-                                                    <span className={`badge status-${brand.active ? 'active' : 'expired'}`}>
-                                                        {brand.active ? '활동중' : '만료'}
+                                                    <span className={`badge status-${brand.isActive ? 'active' : 'expired'}`}>
+                                                        {brand.isActive ? '활동중' : '만료'} {/* 수정 */}
                                                     </span>
                                                 </td>
 

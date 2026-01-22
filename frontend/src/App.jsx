@@ -1,11 +1,23 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 // 페이지 import
 import Test1 from './test1';
 import AdminDashboard from './pages/Dashboard/AdminDashboard';
-import Brands from './pages/Brands/Brands';
+import Brands from './pages/CRM/Brands.jsx';
+import Projects from './pages/CRM/Projects.jsx';
+import IncomingRequests from './pages/Inventory/IncomingRequests.jsx';
+import Products from './pages/Inventory/Products.jsx';
+import StockStatus from './pages/Inventory/StockStatus.jsx';
+import Sales from './pages/Accounting/Sales.jsx';
+import Settlement from './pages/Accounting/Settlement.jsx';
+import Attendance from './pages/StaffManagement/Attendance.jsx';
+import StaffRegistration from './pages/StaffManagement/StaffRegistration.jsx';
+import WorkSchedule from './pages/StaffManagement/WorkSchedule.jsx';
+import VisitorStatistics from './pages/Reports/VisitorStatistics.jsx';
+import Analysis from './pages/Reports/Analysis.jsx';
+import AccessLog from './pages/Setting/AccessLog.jsx';
+import Permission from './pages/Setting/Permission.jsx';
 
 function App() {
   // State to toggle the dropdown visibility
@@ -15,7 +27,7 @@ function App() {
     <BrowserRouter>
 
       {/* --- 개발자 메뉴 START --- */}
-      <div style={styles.devMenuContainer}>
+      {/* <div style={styles.devMenuContainer}>
         <button
           onClick={() => setIsDevMenuOpen(!isDevMenuOpen)}
           style={styles.devButton}
@@ -34,9 +46,10 @@ function App() {
             <Link to="/Brands" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>
               Brands List
             </Link>
+
           </div>
         )}
-      </div>
+      </div> */}
       {/* --- 개발자 메뉴 end --- */}
 
 
@@ -44,7 +57,35 @@ function App() {
       <Routes>
         <Route path="/test1" element={<Test1 />} />
         <Route path="/AdminDashboard" element={<AdminDashboard />} />
+
+        {/* CRM */}
         <Route path="/Brands" element={<Brands />} />
+        <Route path="/Projects" element={<Projects />} />
+
+        {/* Inventory */}
+        <Route path="/IncomingRequests" element={<IncomingRequests />} />
+        <Route path="/Products" element={<Products />} />
+        <Route path="/StockStatus" element={<StockStatus />} />
+
+        {/* Accounting */}
+        <Route path="/Sales" element={<Sales />} />
+        <Route path="/Settlement" element={<Settlement />} />
+
+        {/* StaffManagement */}
+        <Route path="/Attendance" element={<Attendance />} />
+        <Route path="/StaffRegistration" element={<StaffRegistration />} />
+        <Route path="/WorkSchedule" element={<WorkSchedule />} />
+
+        {/* StaffManagement */}
+        <Route path="/VisitorStatistics" element={<VisitorStatistics />} />
+        <Route path="/Analysis" element={<Analysis />} />
+
+        {/* Setting */}
+        <Route path="/AccessLog" element={<AccessLog />} />
+        <Route path="/Permission" element={<Permission />} />
+
+
+
       </Routes>
 
     </BrowserRouter>

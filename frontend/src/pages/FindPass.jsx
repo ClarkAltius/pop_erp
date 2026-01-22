@@ -1,6 +1,6 @@
 // src/pages/FindPass.jsx
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api/axios.js";
 
 const FindPass = () => {
   const [page, setPage] = useState("check"); // "check" or "edit"
@@ -37,10 +37,10 @@ const FindPass = () => {
       params.append("email", email);
       params.append("phone", phone);
 
-      await axios.post(
-        "http://localhost:9980/user/reset-password",
+      await api.post(
+        "/user/reset-password",
         params.toString(),
-        { headers: { "Content-Type": "application/x-www-form-urlencoded" }, withCredentials: true }
+        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
       );
       setPage("edit");
     } catch (error) {
@@ -80,10 +80,10 @@ const FindPass = () => {
     params.append("newPassword", newPassword);
 
     try {
-      const response = await axios.post(
-        "http://localhost:9980/user/reset-password",
+      const response = await api.post(
+        "/user/reset-password",
         params.toString(),
-        { headers: { "Content-Type": "application/x-www-form-urlencoded" }, withCredentials: true }
+        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
       );
       setSaveMessage(response.data);
       setEditInputs({ newPassword: "", confirmPassword: "" });

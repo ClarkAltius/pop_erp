@@ -39,30 +39,30 @@ export default function MyPage() {
         }
     };
 
-    useEffect(() => {
-        async function initMyPage() {
+    // useEffect(() => {
+    //     async function initMyPage() {
 
-            // 🔒 로그인 체크 (현재는 비활성화)
-            /*
-            const isLoggedIn = await checkLogin();
-            if (!isLoggedIn) {
-                navigate("/login");
-                return;
-            }
-            */
+    //         // 🔒 로그인 체크 (현재는 비활성화)
+    //         /*
+    //         const isLoggedIn = await checkLogin();
+    //         if (!isLoggedIn) {
+    //             navigate("/login");
+    //             return;
+    //         }
+    //         */
 
-            // 👤 유저 정보 조회
-            try {
-                const res = await axios.get("http://localhost:8080/api/user");
-                setForm({ ...res.data, password: "", confirmPassword: "" });
-            } catch (err) {
-                console.error(err);
-                alert("유저 정보를 불러오지 못했습니다.");
-            }
-        }
+    //         // 👤 유저 정보 조회
+    //         try {
+    //             const res = await axios.get("http://localhost:8080/api/user");
+    //             setForm({ ...res.data, password: "", confirmPassword: "" });
+    //         } catch (err) {
+    //             console.error(err);
+    //             alert("유저 정보를 불러오지 못했습니다.");
+    //         }
+    //     }
 
-        initMyPage();
-    }, [navigate]);
+    //     initMyPage();
+    // }, [navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -134,20 +134,20 @@ export default function MyPage() {
             errors.phone
         ) return;
 
-        try {
-            await axios.put("http://localhost:8080/api/user", {
-                email: form.email,
-                full_name: form.full_name,
-                address: form.address,
-                phone: form.phone,
-                password: form.password || undefined,
-            });
-            alert("회원 정보가 수정되었습니다.");
-            setForm(prev => ({ ...prev, password: "", confirmPassword: "" }));
-        } catch (err) {
-            console.error(err);
-            setErrors(prev => ({ ...prev, general: "회원 정보 수정 실패" }));
-        }
+        //     try {
+        //         await axios.put("http://localhost:8080/api/user", {
+        //             email: form.email,
+        //             full_name: form.full_name,
+        //             address: form.address,
+        //             phone: form.phone,
+        //             password: form.password || undefined,
+        //         });
+        //         alert("회원 정보가 수정되었습니다.");
+        //         setForm(prev => ({ ...prev, password: "", confirmPassword: "" }));
+        //     } catch (err) {
+        //         console.error(err);
+        //         setErrors(prev => ({ ...prev, general: "회원 정보 수정 실패" }));
+        //     }
     };
 
     const handleLogout = () => {

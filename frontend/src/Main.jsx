@@ -27,22 +27,23 @@ createRoot(document.getElementById("root")).render(
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/findpass" element={<FindPass />} />
+          <Route path="/mypage" element={<MyPage />} />
 
           {/* 로그인 해야만 접근 가능 */}
-          <Route
+          {/* <Route
             path="/mypage"
             element={
               <ProtectedRoute>
                 <MyPage />
               </ProtectedRoute>
             }
-          />
+          /> */}
 
           {/* 루트 경로 / → 로그인 여부 따라 리다이렉트 */}
-          <Route
+          {/* <Route
             path="/"
             element={<Navigate to="/mypage" replace />}
-          />
+          /> */}
 
           {/* 잘못된 경로 처리 */}
           <Route path="*" element={<Navigate to="/" replace />} />

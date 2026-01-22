@@ -20,7 +20,7 @@ public class Brands {
     private String name;
 
     @Column(name = "commission_rate")
-    private BigDecimal commision;
+    private BigDecimal commission;
 
     @Column(name = "contact_email")
     private String email;

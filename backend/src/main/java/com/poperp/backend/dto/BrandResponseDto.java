@@ -12,15 +12,15 @@ public class BrandResponseDto {
 
     private Long id;
     private String name;
-    private BigDecimal commission;
-    private String email;
-    private boolean active;
+    private BigDecimal commissionRate;
+    private String contactEmail;
+    private boolean isActive;
 
     public static BrandResponseDto from(Brands brands) {
         return new BrandResponseDto(
                 brands.getId(),
                 brands.getName(),
-                brands.getCommision(),
+                brands.getCommission(),
                 brands.getEmail(),
                 brands.isActive()
         );

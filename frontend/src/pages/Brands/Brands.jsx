@@ -27,8 +27,8 @@ function Brands() {
                         limit: limit
                     }
                 });
-                setBrands(response.data.brands); // 브랜드 목록 업데이트
-                setTotal(response.data.total);   // 총 데이터 수 업데이트
+                setBrands(response.data.content); // 브랜드 목록 업데이트
+                setTotal(response.data.totalElements);   // 총 데이터 수 업데이트
             } catch (err) {
                 setError("브랜드 목록을 불러오는 데 실패했습니다.");
             } finally {

@@ -12,4 +12,5 @@ public interface BrandRepository extends JpaRepository<Brands, Long> {
 
     Page<Brands> findByActiveTrue(Pageable pageable);
 
+    Page<Brands> findAll(Pageable pageable);
 }

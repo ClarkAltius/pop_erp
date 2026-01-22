@@ -17,9 +17,10 @@ public class BrandController {
 
     @GetMapping
     public Page<BrandResponseDto> getBrands(
-            @RequestParam(defaultValue = "0") int page
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "true") boolean activeOnly
     ) {
-        return brandService.getActiveBrands(page);
+        return brandService.getBrands(page, activeOnly);
     }
 
     @GetMapping("/{id}")

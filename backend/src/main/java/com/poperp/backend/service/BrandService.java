@@ -6,9 +6,8 @@ import com.poperp.backend.repository.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +21,16 @@ public class BrandService {
         return brandRepository.findByActiveTrue(
                 PageRequest.of(page, size)
         ).map(BrandResponseDto::from);
+    }
+
+    public Page<BrandResponseDto> getBrands(int page, boolean activeOnly){
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Page<Brands> result = activeOnly
+                ? brandRepository.findByActiveTrue(pageable)
+                : brandRepository.findAll(pageable);
+
+        return result.map(BrandResponseDto::from);
     }
 
     public BrandResponseDto getBrand(Long id) {

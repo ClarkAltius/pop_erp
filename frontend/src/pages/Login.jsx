@@ -1,7 +1,6 @@
 // src/pages/Login.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Login() {
@@ -17,13 +16,19 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await api.post("/login", { email, password });
-      login(res.data); // Context + sessionStorage 저장
-      //navigate("/");   // 로그인 성공 후 홈으로 이동
-      navigate("/mypage") // 로그인 성공 후 마이페이지로 이동(임시)
+      // AuthContext에 로그인 로직 위임
+      const result = await login(email, password);
+
+      if (!result.success) {
+        alert(result.message || "로그인 실패");
+        return;
+      }
+
+      // 로그인 성공 후 마이페이지 이동
+      navigate("/mypage");
     } catch (err) {
-      console.error("로그인 실패:", err);
-      alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+      console.error(err);
+      alert("로그인 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }

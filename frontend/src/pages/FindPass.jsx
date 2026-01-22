@@ -1,3 +1,4 @@
+// src/pages/FindPass.jsx
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -10,22 +11,26 @@ const FindPass = () => {
 
   const PASSWORD_REGEX = /^[A-Z][A-Za-z0-9!@#$%^&*]{7,}$/;
 
-  const handleChange = e => {
+  // 사용자 정보 입력 변경
+  const handleChange = (e) => {
     setInputs({ ...inputs, [e.target.id]: e.target.value });
     setMessage("");
   };
 
-  const handleEditChange = e => {
+  // 새 비밀번호 입력 변경
+  const handleEditChange = (e) => {
     setEditInputs({ ...editInputs, [e.target.id]: e.target.value });
     setSaveMessage("");
   };
 
+  // 사용자 정보 확인 후 비밀번호 재설정 페이지로 이동
   const handleCheck = async () => {
     const { name, email, phone } = inputs;
     if (!name.trim() || !email?.trim() || !phone?.trim()) {
       setMessage("모든 항목을 입력해주세요.");
       return;
     }
+
     try {
       const params = new URLSearchParams();
       params.append("name", name);
@@ -33,7 +38,7 @@ const FindPass = () => {
       params.append("phone", phone);
 
       await axios.post(
-        "http://localhost:9000/user/reset-password",
+        "http://localhost:9980/user/reset-password",
         params.toString(),
         { headers: { "Content-Type": "application/x-www-form-urlencoded" }, withCredentials: true }
       );
@@ -43,6 +48,7 @@ const FindPass = () => {
     }
   };
 
+  // 새 비밀번호 저장
   const handleSave = async () => {
     const { name, email, phone } = inputs;
     const { newPassword, confirmPassword } = editInputs;
@@ -75,7 +81,7 @@ const FindPass = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/user/reset-password",
+        "http://localhost:9980/user/reset-password",
         params.toString(),
         { headers: { "Content-Type": "application/x-www-form-urlencoded" }, withCredentials: true }
       );
@@ -112,9 +118,7 @@ const FindPass = () => {
 
             {/* 이름 */}
             <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-              <span style={{ width: "80px", fontWeight: "bold", textAlign: "left", flexShrink: 0 }}>
-                이름
-              </span>
+              <span style={{ width: "80px", fontWeight: "bold", flexShrink: 0 }}>이름</span>
               <input
                 id="name"
                 type="text"
@@ -127,9 +131,7 @@ const FindPass = () => {
 
             {/* 이메일 */}
             <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-              <span style={{ width: "80px", fontWeight: "bold", textAlign: "left", flexShrink: 0 }}>
-                이메일
-              </span>
+              <span style={{ width: "80px", fontWeight: "bold", flexShrink: 0 }}>이메일</span>
               <input
                 id="email"
                 type="email"
@@ -142,9 +144,7 @@ const FindPass = () => {
 
             {/* 전화번호 */}
             <div style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
-              <span style={{ width: "80px", fontWeight: "bold", textAlign: "left", flexShrink: 0 }}>
-                전화번호
-              </span>
+              <span style={{ width: "80px", fontWeight: "bold", flexShrink: 0 }}>전화번호</span>
               <input
                 id="phone"
                 type="text"
@@ -158,16 +158,9 @@ const FindPass = () => {
               ※ 전화번호에 " - "을 넣어 입력해 주세요.
             </small>
 
-            {message && (
-              <div style={{ color: "red", fontSize: "12px", marginBottom: "10px" }}>
-                {message}
-              </div>
-            )}
+            {message && <div style={{ color: "red", fontSize: "12px", marginBottom: "10px" }}>{message}</div>}
 
-            <button
-              onClick={handleCheck}
-              style={{ width: "100%", padding: "10px" }}
-            >
+            <button onClick={handleCheck} style={{ width: "100%", padding: "10px" }}>
               다음
             </button>
           </>
@@ -179,9 +172,7 @@ const FindPass = () => {
 
             {/* 새 비밀번호 */}
             <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-              <span style={{ width: "80px", fontWeight: "bold", textAlign: "left", flexShrink: 0 }}>
-                새 비밀번호
-              </span>
+              <span style={{ width: "80px", fontWeight: "bold", flexShrink: 0 }}>새 비밀번호</span>
               <input
                 id="newPassword"
                 type="password"
@@ -193,9 +184,7 @@ const FindPass = () => {
 
             {/* 비밀번호 확인 */}
             <div style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
-              <span style={{ width: "80px", fontWeight: "bold", textAlign: "left", flexShrink: 0 }}>
-                비밀번호 확인
-              </span>
+              <span style={{ width: "80px", fontWeight: "bold", flexShrink: 0 }}>비밀번호 확인</span>
               <input
                 id="confirmPassword"
                 type="password"
@@ -220,10 +209,7 @@ const FindPass = () => {
               </div>
             )}
 
-            <button
-              onClick={handleSave}
-              style={{ width: "100%", padding: "10px" }}
-            >
+            <button onClick={handleSave} style={{ width: "100%", padding: "10px" }}>
               저장
             </button>
           </>

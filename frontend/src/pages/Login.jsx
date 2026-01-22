@@ -1,34 +1,33 @@
+// src/pages/Login.jsx
 import { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../api/axios.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8080/api/login", {
-        email,
-        password,
-      });
-
-      const user = res.data; // JSON 로그인
-      console.log("로그인 성공:", user);
-
-      sessionStorage.setItem("user", JSON.stringify(user));
-      navigate("/");
-    } catch (error) {
-      console.error("로그인 실패:", error);
+      const res = await api.post("/login", { email, password });
+      login(res.data); // Context + sessionStorage 저장
+      //navigate("/");   // 로그인 성공 후 홈으로 이동
+      navigate("/mypage") // 로그인 성공 후 마이페이지로 이동(임시)
+    } catch (err) {
+      console.error("로그인 실패:", err);
       alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+    } finally {
+      setLoading(false);
     }
   };
-
-
-
 
   return (
     <div
@@ -50,7 +49,6 @@ export default function Login() {
         <h2 style={{ textAlign: "center", marginBottom: "30px" }}>로그인</h2>
 
         <form onSubmit={handleLogin}>
-          {/* 이메일 */}
           <div
             style={{
               display: "flex",
@@ -70,7 +68,6 @@ export default function Login() {
             />
           </div>
 
-          {/* 비밀번호 */}
           <div
             style={{
               display: "flex",
@@ -90,10 +87,13 @@ export default function Login() {
             />
           </div>
 
-          {/* 버튼 영역 */}
           <div style={{ display: "flex", gap: "10px" }}>
-            <button type="submit" style={{ flex: 1, padding: "10px" }}>
-              로그인
+            <button
+              type="submit"
+              style={{ flex: 1, padding: "10px" }}
+              disabled={loading}
+            >
+              {loading ? "로그인 중..." : "로그인"}
             </button>
 
             <button
@@ -104,7 +104,7 @@ export default function Login() {
               회원가입
             </button>
           </div>
-          {/* 비밀번호 찾기 링크 */}
+
           <div style={{ textAlign: "center", marginTop: "20px" }}>
             <Link to="/findpass" className="text-muted small">
               비밀번호를 잊으셨나요?

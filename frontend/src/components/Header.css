@@ -1,0 +1,187 @@
+/* Header.css */
+
+/* --- 전체 화면 flex 레이아웃 --- */
+.dashboard-container {
+    display: flex;
+    width: 100vw;
+    /* 화면 전체 폭 */
+    height: 100vh;
+    /* 화면 전체 높이 */
+    overflow: hidden;
+    /* 사이드바나 컨텐츠가 넘치면 스크롤 안 생기게 */
+}
+
+/* --- 사이드바 --- */
+.sidebar-wrapper {
+    flex: 0 0 260px;
+    /* 고정 폭 260px */
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* --- 메인 영역 --- */
+.main-content-wrapper {
+    flex: 1;
+    /* 남은 영역 모두 차지 */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    /* flex 자식이 넘칠 때 깨지지 않게 */
+    overflow: hidden;
+}
+
+/* --- 헤더 --- */
+.top-header {
+    width: 100%;
+    /* 부모 폭 꽉 채우기 */
+    height: 64px;
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    box-sizing: border-box;
+    /* padding 포함 폭 계산 */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* --- 메인 컨텐츠 --- */
+.dashboard-main {
+    flex: 1;
+    /* 헤더 제외하고 남은 공간 모두 차지 */
+    overflow-y: auto;
+    padding: 20px;
+    /* 내부 여백 */
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    /* padding 포함 */
+}
+
+
+.top-header {
+    height: 64px;
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* --- Search Area --- */
+.header-left {
+    flex: 1;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background-color: #f3f4f6;
+    border-radius: 6px;
+    padding: 8px 12px;
+    transition: box-shadow 0.2s;
+}
+
+.search-box:focus-within {
+    background-color: white;
+    box-shadow: 0 0 0 2px #e5e7eb;
+    /* Focus ring */
+}
+
+.search-icon {
+    margin-right: 8px;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    outline: none;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.search-input::placeholder {
+    color: #9ca3af;
+}
+
+/* --- Right Side Actions --- */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.icon-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.icon {
+    font-size: 1.2rem;
+}
+
+.badge-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
+    /* Alert Red */
+    border-radius: 50%;
+    border: 1px solid white;
+}
+
+/* --- User Profile --- */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 16px;
+    border-left: 1px solid #e5e7eb;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #e5e7eb;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.user-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.user-role {
+    font-size: 0.75rem;
+    color: #6b7280;
+}

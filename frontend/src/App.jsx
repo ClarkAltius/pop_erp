@@ -9,6 +9,15 @@ import Projects from './pages/CRM/Projects.jsx';
 import IncomingRequests from './pages/Inventory/IncomingRequests.jsx';
 import Products from './pages/Inventory/Products.jsx';
 import StockStatus from './pages/Inventory/StockStatus.jsx';
+import Sales from './pages/Accounting/Sales.jsx';
+import Settlement from './pages/Accounting/Settlement.jsx';
+import Attendance from './pages/StaffManagement/Attendance.jsx';
+import StaffRegistration from './pages/StaffManagement/StaffRegistration.jsx';
+import WorkSchedule from './pages/StaffManagement/WorkSchedule.jsx';
+import VisitorStatistics from './pages/Reports/VisitorStatistics.jsx';
+import Analysis from './pages/Reports/Analysis.jsx';
+import AccessLog from './pages/Setting/AccessLog.jsx';
+import Permission from './pages/Setting/Permission.jsx';
 
 function App() {
   // State to toggle the dropdown visibility
@@ -52,10 +61,30 @@ function App() {
         {/* CRM */}
         <Route path="/Brands" element={<Brands />} />
         <Route path="/Projects" element={<Projects />} />
+
         {/* Inventory */}
         <Route path="/IncomingRequests" element={<IncomingRequests />} />
         <Route path="/Products" element={<Products />} />
         <Route path="/StockStatus" element={<StockStatus />} />
+
+        {/* Accounting */}
+        <Route path="/Sales" element={<Sales />} />
+        <Route path="/Settlement" element={<Settlement />} />
+
+        {/* StaffManagement */}
+        <Route path="/Attendance" element={<Attendance />} />
+        <Route path="/StaffRegistration" element={<StaffRegistration />} />
+        <Route path="/WorkSchedule" element={<WorkSchedule />} />
+
+        {/* StaffManagement */}
+        <Route path="/VisitorStatistics" element={<VisitorStatistics />} />
+        <Route path="/Analysis" element={<Analysis />} />
+
+        {/* Setting */}
+        <Route path="/AccessLog" element={<AccessLog />} />
+        <Route path="/Permission" element={<Permission />} />
+
+
 
       </Routes>
 

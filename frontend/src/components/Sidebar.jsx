@@ -67,7 +67,7 @@ const Sidebar = () => {
                     {isInventoryOpen && (
                         <div className="sub-menu">
                             <a href="/Products" className="nav-item sub-item">상품 조회</a>
-                            <a href="/IncomingRequests" className="nav-item sub-item">입고/출고 요청</a>
+                            <a href="/IncomingRequests" className="nav-item sub-item">입고 / 출고 요청</a>
                             <a href="/StockStatus" className="nav-item sub-item">재고 현황</a>
                         </div>
                     )}
@@ -86,8 +86,8 @@ const Sidebar = () => {
 
                     {isAccountingOpen && (
                         <div className="sub-menu">
-                            <a href="#" className="nav-item sub-item">매출 현황</a>
-                            <a href="#" className="nav-item sub-item">정산 현황</a>
+                            <a href="/Sales" className="nav-item sub-item">매출 현황</a>
+                            <a href="/Settlement" className="nav-item sub-item">정산 현황</a>
                         </div>
                     )}
 
@@ -105,9 +105,9 @@ const Sidebar = () => {
 
                     {isStaffOpen && (
                         <div className="sub-menu">
-                            <a href="#" className="nav-item sub-item">스태프 등록</a>
-                            <a href="#" className="nav-item sub-item">출근/퇴근 관리</a>
-                            <a href="#" className="nav-item sub-item">근무 스케줄표</a>
+                            <a href="/StaffRegistration" className="nav-item sub-item">스태프 등록</a>
+                            <a href="/Attendance" className="nav-item sub-item">출근 / 퇴근 관리</a>
+                            <a href="/WorkSchedule" className="nav-item sub-item">근무 스케줄표</a>
                         </div>
                     )}
 
@@ -120,13 +120,13 @@ const Sidebar = () => {
                         }}
                     >
                         <span className="nav-icon"></span>
-                        Report
+                        Reports
                     </a>
 
                     {isReportOpen && (
                         <div className="sub-menu">
-                            <a href="#" className="nav-item sub-item">방문자 통계</a>
-                            <a href="#" className="nav-item sub-item">종료 리포트</a>                        </div>
+                            <a href="/VisitorStatistics" className="nav-item sub-item">방문자 통계</a>
+                            <a href="/Analysis" className="nav-item sub-item">분석 / 인사이트</a>                        </div>
                     )}
                 </div>
 
@@ -147,8 +147,8 @@ const Sidebar = () => {
 
                     {isSettingOpen && (
                         <div className="sub-menu">
-                            <a href="#" className="nav-item sub-item">접속 로그</a>
-                            <a href="#" className="nav-item sub-item">권한 관리</a>                        </div>
+                            <a href="/AccessLog" className="nav-item sub-item">접속 로그</a>
+                            <a href="/Permission" className="nav-item sub-item">권한 관리</a>                        </div>
                     )}
 
                 </div>

@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtProvider.validateToken(token)) {
 
                 Long userId = jwtProvider.getUserId(token);
-                String role = jwtProvider.getRole(token);
+                String role = jwtProvider.getRole(token).toUpperCase();
 
                 log.info("JWT Filter userId={}, role={}", userId, role);
 

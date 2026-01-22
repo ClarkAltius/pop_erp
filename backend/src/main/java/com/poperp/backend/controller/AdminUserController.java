@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class AdminUserController {
 
     private final AdminUserService adminUserService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','BRAND_MANAGER')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @RequestMapping("/api/users")
     public ResponseEntity<UserResponse> createUserByAdmin(
             @RequestBody @Valid AdminCreateUserRequest request
     ) {

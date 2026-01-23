@@ -1,5 +1,6 @@
 package com.poperp.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.poperp.backend.entity.Brands;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +14,8 @@ public class BrandResponseDto {
     private String name;
     private BigDecimal commissionRate;
     private String contactEmail;
+
+    @JsonProperty("isActive")
     private boolean isActive;
 
     public static BrandResponseDto from(Brands brand) {

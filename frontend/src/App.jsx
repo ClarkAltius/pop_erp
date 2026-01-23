@@ -1,96 +1,156 @@
 import { useState } from 'react';
-import axios from 'axios';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 
-// 페이지 import
-import Test1 from './test1';
+// Auth & Components
+import { useAuth } from "./context/AuthContext.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+
+// Pages
+import Login from "./pages/Login.jsx";
+import SignUp from "./pages/SignUp.jsx";
+import FindPass from "./pages/FindPass.jsx";
+import MyPage from "./pages/MyPage.jsx";
 import AdminDashboard from './pages/Dashboard/AdminDashboard';
-import Brands from './pages/Brands/Brands';
+import Brands from './pages/CRM/Brands.jsx';
+import Projects from './pages/CRM/Projects.jsx';
+import IncomingRequests from './pages/Inventory/IncomingRequests.jsx';
+import Products from './pages/Inventory/Products.jsx';
+import StockStatus from './pages/Inventory/StockStatus.jsx';
+import Sales from './pages/Accounting/Sales.jsx';
+import Settlement from './pages/Accounting/Settlement.jsx';
+import Attendance from './pages/StaffManagement/Attendance.jsx';
+import StaffRegistration from './pages/StaffManagement/StaffRegistration.jsx';
+import WorkSchedule from './pages/StaffManagement/WorkSchedule.jsx';
+import VisitorStatistics from './pages/Reports/VisitorStatistics.jsx';
+import Analysis from './pages/Reports/Analysis.jsx';
+import AccessLog from './pages/Setting/AccessLog.jsx';
+import Permission from './pages/Setting/Permission.jsx';
 
 function App() {
-  // State to toggle the dropdown visibility
   const [isDevMenuOpen, setIsDevMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <BrowserRouter>
-
-      {/* --- 개발자 메뉴 START --- */}
+      {/* --- DEV MENU START --- */}
       <div style={styles.devMenuContainer}>
-        <button
-          onClick={() => setIsDevMenuOpen(!isDevMenuOpen)}
-          style={styles.devButton}
-        >
-          🛠️ 개발자용 페이지 링크 {isDevMenuOpen ? '▼' : '▲'}
+        {/* User Status Badge */}
+        <div style={{ ...styles.statusBadge, backgroundColor: user ? '#e6fffa' : '#fff5f5', borderColor: user ? '#38b2ac' : '#feb2b2' }}>
+          <span style={{ fontSize: '12px', color: user ? '#2c7a7b' : '#c53030' }}>
+            {user ? `● ${user.role || 'User'} (${user.email})` : '● Not Logged In'}
+          </span>
+        </div>
+
+        <button onClick={() => setIsDevMenuOpen(!isDevMenuOpen)} style={styles.devButton}>
+          🛠️ Dev Menu {isDevMenuOpen ? '▼' : '▲'}
         </button>
 
         {isDevMenuOpen && (
           <div style={styles.dropdown}>
-            <Link to="/test1" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>
-              Test Page 1
-            </Link>
-            <Link to="/AdminDashboard" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>
-              Admin Dashboard
-            </Link>
-            <Link to="/Brands" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>
-              Brands List
-            </Link>
+            <Link to="/AdminDashboard" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>Admin Dash</Link>
+            <Link to="/login" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>Login Page</Link>
+            {/* Added a Logout option for convenience */}
+            {user && <button style={styles.link} onClick={() => {/* add your logout function here */ }}>Logout</button>}
           </div>
         )}
       </div>
-      {/* --- 개발자 메뉴 end --- */}
+      {/* --- DEV MENU END --- */}
 
-
-      {/* Route Definitions */}
       <Routes>
-        <Route path="/test1" element={<Test1 />} />
-        <Route path="/AdminDashboard" element={<AdminDashboard />} />
-        <Route path="/Brands" element={<Brands />} />
-      </Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/findpass" element={<FindPass />} />
 
+        {/* Private Routes Group (Requires Login) */}
+        {/* <Route element={<PrivateRoute />}> */}
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+
+        {/* CRM */}
+        <Route path="/Brands" element={<Brands />} />
+        <Route path="/Projects" element={<Projects />} />
+
+        {/* Inventory */}
+        <Route path="/IncomingRequests" element={<IncomingRequests />} />
+        <Route path="/Products" element={<Products />} />
+        <Route path="/StockStatus" element={<StockStatus />} />
+
+        {/* Management */}
+        <Route path="/Sales" element={<Sales />} />
+        <Route path="/Settlement" element={<Settlement />} />
+        <Route path="/Attendance" element={<Attendance />} />
+        <Route path="/StaffRegistration" element={<StaffRegistration />} />
+        <Route path="/WorkSchedule" element={<WorkSchedule />} />
+
+        {/* Reports & Settings */}
+        <Route path="/VisitorStatistics" element={<VisitorStatistics />} />
+        <Route path="/Analysis" element={<Analysis />} />
+        <Route path="/AccessLog" element={<AccessLog />} />
+        <Route path="/Permission" element={<Permission />} />
+        {/* </Route> */}
+
+        {/* Home Logic: Redirect based on auth */}
+        <Route path="/" element={<Navigate to={user ? "/AdminDashboard" : "/login"} replace />} />
+
+        {/* 404 Redirect */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </BrowserRouter>
   );
 }
 
-//  App css 파일과 독립된 개발자 버튼 형식)
 const styles = {
   devMenuContainer: {
     position: 'fixed',
     bottom: '20px',
     right: '20px',
     zIndex: 9999,
-    fontFamily: 'sans-serif',
+    display: 'flex',      // Align badge and button horizontally
+    alignItems: 'center',
+    gap: '10px'
+  },
+  statusBadge: {
+    padding: '6px 12px',
+    borderRadius: '20px',
+    border: '1px solid',
+    backgroundColor: '#fff',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    whiteSpace: 'nowrap',
+    fontWeight: '600'
   },
   devButton: {
     backgroundColor: '#000',
-    color: '#0f0', // Hacker green text
+    color: '#0f0',
     border: '2px solid #0f0',
     padding: '10px 15px',
     borderRadius: '8px',
     cursor: 'pointer',
-    fontWeight: 'bold',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+    fontWeight: 'bold'
   },
   dropdown: {
     position: 'absolute',
-    bottom: '100%', // Opens upwards
+    bottom: '100%',
     right: '0',
     marginBottom: '10px',
     backgroundColor: '#fff',
     border: '1px solid #ccc',
     borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
-    width: '200px',
+    width: '180px',
+    overflow: 'hidden'
   },
   link: {
-    padding: '12px 16px',
+    padding: '12px',
     textDecoration: 'none',
     color: '#333',
     borderBottom: '1px solid #eee',
     fontSize: '14px',
-    transition: 'background 0.2s',
+    textAlign: 'left',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer'
   }
 };
 

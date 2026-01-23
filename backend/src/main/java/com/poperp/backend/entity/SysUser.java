@@ -2,9 +2,7 @@ package com.poperp.backend.entity;
 
 import com.poperp.backend.constant.Role;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +11,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SysUser {
 
     @Id
@@ -39,10 +39,16 @@ public class SysUser {
     private Long defaultPopupStoreId;
 
     @Column(name = "is_active")
-    private boolean active;
+    private boolean isActive;
 
     private LocalDateTime lastLogin;
 
+    @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
 

@@ -394,6 +394,7 @@ components:
         name: { type: string }
         commissionRate: { type: number }
         contactEmail: { type: string }
+        isActive: { type: boolean }
 
     product:
       type: object

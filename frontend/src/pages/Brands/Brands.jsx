@@ -1,35 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './Brands.css';
 
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
 
-const Brands = () => {
-    // Mock Data: Brands & Contract Details
-    const [brands] = useState([
-        {
-            id: 1,
-            name: "Nike",
-            contact_email: "procurement@nike.com",
-            is_active: 1, // 1 = active
-            commission_rate: 0.15,
-        },
-        {
-            id: 2,
-            name: "카카오프렌즈",
-            contact_email: "procurement@kakao.com",
-            is_active: 1, // 1 = active
-            commission_rate: 0.15,
-        },
-        {
-            id: 3,
-            name: "먼작귀",
-            contact_email: "procurement@chiikawa.com",
-            is_active: 1, // 1 = active
-            commission_rate: 0.15,
-        },
-    ]);
-    // Mock Data End
+function Brands() {
+
+    const BACKEND_URL = import.meta.env.VITE_API_BASE_URL;
+
+    const [brands, setBrands] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const [page, setPage] = useState(1);       // 현재 페이지
+    const [limit, setLimit] = useState(10);    // 페이지당 아이템 수
+    const [total, setTotal] = useState(0);     // 총 브랜드 개수
+
+    useEffect(() => {
+        const fetchBrands = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.get(`${BACKEND_URL}/api/brands`, {
+                    params: { page, limit }
+                });
+                setBrands(response.data.content);  // ⚠ content 사용
+                setTotal(response.data.totalElements);  // totalElements 사용
+            } catch (err) {
+                setError("브랜드 목록을 불러오는 데 실패했습니다.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBrands();
+    }, [page, limit]);
+
+
+    const totalPages = Math.ceil(total / limit);
+
+    const handlePrev = () => {
+        setPage(prev => Math.max(prev - 1, 1));
+    };
+
+    const handleNext = () => {
+        setPage(prev => Math.min(prev + 1, totalPages));
+    };
+
 
     return (
         <div className="dashboard-container">
@@ -49,7 +66,7 @@ const Brands = () => {
                         {/* Page Header */}
                         <div className="page-header">
                             <div>
-                                <h1 className="page-title">브랜드 일람</h1>
+                                <h1 className="page-title">브랜드 관리</h1>
                                 <p className="page-subtitle">파트너 관계와 계약 관리</p>
                             </div>
                             <div className="header-actions">
@@ -94,10 +111,8 @@ const Brands = () => {
                                                 </td>
 
                                                 <td>
-                                                    {/* Fix: Check if 1, set class to 'active', otherwise 'inactive' */}
-                                                    <span className={`badge status-${brand.is_active === 1 ? 'active' : 'expired'}`}>
-                                                        {/* Fix: Display text instead of the number 1 */}
-                                                        {brand.is_active === 1 ? '활동중' : '만료'}
+                                                    <span className={`badge status-${brand.active ? 'active' : 'expired'}`}>
+                                                        {brand.active ? '활동중' : '만료'}
                                                     </span>
                                                 </td>
 
@@ -114,10 +129,11 @@ const Brands = () => {
 
                             {/* Pagination Placeholder */}
                             <div className="table-footer">
-                                <span className="footer-text">24개 중 3개 표기</span>
+                                <span className="footer-text">{total}개 중 {brands.length}개 표기</span>
                                 <div className="pagination-btns">
-                                    <button disabled className="page-btn">이전</button>
-                                    <button className="page-btn">다음</button>
+                                    <button onClick={handlePrev} disabled={page === 1} className="page-btn">이전</button>
+                                    <span className="page-info">{page} / {totalPages}</span>
+                                    <button onClick={handleNext} disabled={page === totalPages} className="page-btn">다음</button>
                                 </div>
                             </div>
 

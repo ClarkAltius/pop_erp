@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.poperp.backend.entity.Brands;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.math.BigDecimal;
 
 @Getter
@@ -19,13 +18,13 @@ public class BrandResponseDto {
     @JsonProperty("isActive")
     private boolean isActive;
 
-    public static BrandResponseDto from(Brands brands) {
+    public static BrandResponseDto from(Brands brand) {
         return new BrandResponseDto(
-                brands.getId(),
-                brands.getName(),
-                brands.getCommission(),
-                brands.getEmail(),
-                brands.isActive()
+                brand.getId(),
+                brand.getName(),
+                brand.getCommissionRate(),
+                brand.getContactEmail(),
+                brand.isActive()
         );
     }
 }

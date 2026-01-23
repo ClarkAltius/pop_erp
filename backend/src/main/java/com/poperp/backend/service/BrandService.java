@@ -8,31 +8,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class BrandService {
 
     private final BrandRepository brandRepository;
 
-    public BrandResponseDto getBrand(Long id) {
-        Brands brand = brandRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("BRAND_NOT_FOUND"));
+    // 활성 브랜드 조회
+    public Page<BrandResponseDto> getActiveBrands(Pageable pageable) {
+        return brandRepository.findByActiveTrue(pageable)
+                .map(BrandResponseDto::from);
+    }
 
-        return BrandResponseDto.from(brand);
-}
-
-//    public List<BrandResponseDto> getBrands(){
-//        return brandRepository.findAll()
-//                .stream()
-//                .map(BrandResponseDto::from)
-//                .toList();
-//
-//    }
-
-    public Page<BrandResponseDto> getBrands(Pageable pageable) {
+    // 전체 브랜드 조회
+    public Page<BrandResponseDto> getAllBrands(Pageable pageable) {
         return brandRepository.findAll(pageable)
-                .map(BrandResponseDto::from); // Page<Brands> → Page<DTO>
+                .map(BrandResponseDto::from);
     }
 }

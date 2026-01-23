@@ -20,11 +20,11 @@ public class Brands {
     private String name;
 
     @Column(name = "commission_rate")
-    private BigDecimal commission;
+    private BigDecimal commissionRate;
 
     @Column(name = "contact_email")
-    private String email;
+    private String contactEmail;
 
     @Column(name = "is_active", nullable = false)
-    private boolean active;
+    private boolean isActive;
 }

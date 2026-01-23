@@ -21,7 +21,7 @@ function Brands() {
         const fetchBrands = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BACKEND_URL}/brands`, {
+                const response = await axios.get(`${BACKEND_URL}/api/brands`, {
                     params: { page, limit }
                 });
                 setBrands(response.data.content);  // ⚠ content 사용

@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BrandRepository extends JpaRepository<Brands, Long> {
     Page<Brands> findByActiveTrue(Pageable pageable);
+    boolean existsByName(String name);
 }

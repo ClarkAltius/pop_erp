@@ -14,15 +14,23 @@ public class BrandService {
 
     private final BrandRepository brandRepository;
 
-    // 활성 브랜드 조회
-    public Page<BrandResponseDto> getActiveBrands(Pageable pageable) {
-        return brandRepository.findByActiveTrue(pageable)
-                .map(BrandResponseDto::from);
-    }
+    public BrandResponseDto getBrand(Long id) {
+        Brands brand = brandRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("BRAND_NOT_FOUND"));
 
-    // 전체 브랜드 조회
-    public Page<BrandResponseDto> getAllBrands(Pageable pageable) {
+        return BrandResponseDto.from(brand);
+}
+
+//    public List<BrandResponseDto> getBrands(){
+//        return brandRepository.findAll()
+//                .stream()
+//                .map(BrandResponseDto::from)
+//                .toList();
+//
+//    }
+
+    public Page<BrandResponseDto> getBrands(Pageable pageable) {
         return brandRepository.findAll(pageable)
-                .map(BrandResponseDto::from);
+                .map(BrandResponseDto::from); // Page<Brands> → Page<DTO>
     }
 }

@@ -16,17 +16,24 @@ function Brands() {
     const [page, setPage] = useState(1);       // 현재 페이지
     const [limit, setLimit] = useState(10);    // 페이지당 아이템 수
     const [total, setTotal] = useState(0);     // 총 브랜드 개수
+    const [totalPages, setTotalPages] = useState(1);
+
+    const [search, setSearch] = useState(""); // 검색어 상태
+
+
 
     useEffect(() => {
         const fetchBrands = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${BACKEND_URL}/brands`, {
-                    params: { page, limit }
+                const response = await axios.get(`${BACKEND_URL}/api/brands`, {
+                    params: { page: page - 1, size: limit }
                 });
                 console.log(response.data)
-                setBrands(response.data.content);  // ⚠ content 사용
+                setBrands(response.data.data);  // ⚠ content 사용
                 setTotal(response.data.totalElements);  // totalElements 사용
+                setTotalPages(response.data.totalPages);
+
             } catch (err) {
                 setError("브랜드 목록을 불러오는 데 실패했습니다.");
             } finally {
@@ -37,8 +44,10 @@ function Brands() {
         fetchBrands();
     }, [page, limit]);
 
+    // 현재 페이지의 마지막 아이템 인덱스 계산
+    const displayedCount = Math.min(page * limit, total);
 
-    const totalPages = Math.ceil(total / limit);
+
 
     const handlePrev = () => {
         setPage(prev => Math.max(prev - 1, 1));
@@ -47,6 +56,12 @@ function Brands() {
     const handleNext = () => {
         setPage(prev => Math.min(prev + 1, totalPages));
     };
+
+    const filteredBrands = brands.filter(
+        brand =>
+            brand.name.toLowerCase().includes(search.toLowerCase()) ||
+            brand.contactEmail.toLowerCase().includes(search.toLowerCase())
+    );
 
 
     return (
@@ -76,6 +91,15 @@ function Brands() {
                             </div>
                         </div>
 
+                        <input
+                            type="text"
+                            placeholder="브랜드명 또는 이메일 검색"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="search-input"
+                        />
+
+
                         {/* Brands Table */}
                         <div className="table-container">
                             <div style={{ overflowX: 'auto' }}>
@@ -90,7 +114,7 @@ function Brands() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {brands.map((brand) => (
+                                        {filteredBrands.map((brand) => (
                                             <tr key={brand.id}>
                                                 {/* Brand Column with Logo */}
                                                 <td>
@@ -131,7 +155,10 @@ function Brands() {
 
                             {/* Pagination Placeholder */}
                             <div className="table-footer">
-                                <span className="footer-text">{total}개 중 {brands.length}개 표기</span>
+                                <span className="footer-text">
+                                    {total}개 중 {Math.min(page * limit, total)}개 표기
+                                </span>
+
                                 <div className="pagination-btns">
                                     <button onClick={handlePrev} disabled={page === 1} className="page-btn">이전</button>
                                     <span className="page-info">{page} / {totalPages}</span>

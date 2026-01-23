@@ -34,13 +34,23 @@ function App() {
     <BrowserRouter>
       {/* --- DEV MENU START --- */}
       <div style={styles.devMenuContainer}>
+        {/* User Status Badge */}
+        <div style={{ ...styles.statusBadge, backgroundColor: user ? '#e6fffa' : '#fff5f5', borderColor: user ? '#38b2ac' : '#feb2b2' }}>
+          <span style={{ fontSize: '12px', color: user ? '#2c7a7b' : '#c53030' }}>
+            {user ? `● ${user.role || 'User'} (${user.email})` : '● Not Logged In'}
+          </span>
+        </div>
+
         <button onClick={() => setIsDevMenuOpen(!isDevMenuOpen)} style={styles.devButton}>
           🛠️ Dev Menu {isDevMenuOpen ? '▼' : '▲'}
         </button>
+
         {isDevMenuOpen && (
           <div style={styles.dropdown}>
             <Link to="/AdminDashboard" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>Admin Dash</Link>
             <Link to="/login" style={styles.link} onClick={() => setIsDevMenuOpen(false)}>Login Page</Link>
+            {/* Added a Logout option for convenience */}
+            {user && <button style={styles.link} onClick={() => {/* add your logout function here */ }}>Logout</button>}
           </div>
         )}
       </div>
@@ -91,10 +101,57 @@ function App() {
 }
 
 const styles = {
-  devMenuContainer: { position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999 },
-  devButton: { backgroundColor: '#000', color: '#0f0', border: '2px solid #0f0', padding: '10px 15px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' },
-  dropdown: { position: 'absolute', bottom: '100%', right: '0', marginBottom: '10px', backgroundColor: '#fff', border: '1px solid #ccc', borderRadius: '8px', display: 'flex', flexDirection: 'column', width: '180px', overflow: 'hidden' },
-  link: { padding: '12px', textDecoration: 'none', color: '#333', borderBottom: '1px solid #eee', fontSize: '14px' }
+  devMenuContainer: {
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    zIndex: 9999,
+    display: 'flex',      // Align badge and button horizontally
+    alignItems: 'center',
+    gap: '10px'
+  },
+  statusBadge: {
+    padding: '6px 12px',
+    borderRadius: '20px',
+    border: '1px solid',
+    backgroundColor: '#fff',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    whiteSpace: 'nowrap',
+    fontWeight: '600'
+  },
+  devButton: {
+    backgroundColor: '#000',
+    color: '#0f0',
+    border: '2px solid #0f0',
+    padding: '10px 15px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontWeight: 'bold'
+  },
+  dropdown: {
+    position: 'absolute',
+    bottom: '100%',
+    right: '0',
+    marginBottom: '10px',
+    backgroundColor: '#fff',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '180px',
+    overflow: 'hidden'
+  },
+  link: {
+    padding: '12px',
+    textDecoration: 'none',
+    color: '#333',
+    borderBottom: '1px solid #eee',
+    fontSize: '14px',
+    textAlign: 'left',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer'
+  }
 };
 
 export default App;

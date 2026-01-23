@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
     // 로그인 함수: 서버 API 호출
     const login = async (email, password) => {
         try {
-            const response = await api.post("/auth/login", { email, password }); // 이미 axios.js에 api 인스턴스를 만들어두었으므로, 하드코딩수정 대신 여기서 재사용한것
+            const response = await api.post("api/auth/login", { email, password }); // 이미 axios.js에 api 인스턴스를 만들어두었으므로, 하드코딩수정 대신 여기서 재사용한것
             const { accessToken, user } = response.data;
 
             // 상태 및 세션 저장
